@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
-  <title>SBTI 人格测试 · 全新维度</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>SBTI 人格测试 · 全新维度</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     :root {
       --bg: #f6faf6;
@@ -539,8 +540,8 @@
     }
     
     .card-preview {
-      width: 350px;
-      height: 500px;
+      width: 360px;
+      min-height: 500px;
       margin: 0 auto;
       background: linear-gradient(135deg, #ffffff, #f8f9fa);
       border-radius: 20px;
@@ -549,6 +550,8 @@
       position: relative;
       overflow: hidden;
       border: 1px solid #e9ecef;
+      display: flex;
+      flex-direction: column;
     }
     
     .card-preview::before {
@@ -566,42 +569,73 @@
       margin-bottom: 20px;
     }
     
+    .card-header h3 {
+      font-size: 14px;
+      color: var(--muted);
+      margin: 0 0 8px 0;
+      font-weight: 500;
+    }
+    
     .card-type {
-      font-size: 24px;
+      font-size: 28px;
       font-weight: bold;
       color: var(--accent-strong);
-      margin-bottom: 8px;
+      margin-bottom: 4px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
     
     .card-title {
       font-size: 16px;
       color: var(--muted);
+      margin-bottom: 12px;
+    }
+    
+    .card-match {
+      font-size: 13px;
+      color: var(--accent);
       margin-bottom: 16px;
+    }
+    
+    .card-image {
+      margin: 16px 0;
+      display: flex;
+      justify-content: center;
+    }
+    
+    .card-image img {
+      width: 120px;
+      height: 120px;
+      object-fit: contain;
     }
     
     .card-content {
       font-size: 14px;
       line-height: 1.6;
       color: var(--text);
-      height: 280px;
-      overflow-y: auto;
-      margin-bottom: 20px;
+      margin: 16px 0;
+      flex: 1;
+    }
+    
+    .card-content h4 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--accent-strong);
+      margin: 0 0 12px 0;
     }
     
     .card-footer {
-      position: absolute;
-      bottom: 24px;
-      left: 24px;
-      right: 24px;
       text-align: center;
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
     }
     
     .qrcode-container {
-      width: 80px;
-      height: 80px;
-      margin: 0 auto 12px;
+      width: 90px;
+      height: 90px;
+      margin: 0 auto 8px;
       background: white;
-      padding: 8px;
+      padding: 10px;
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
@@ -632,6 +666,96 @@
     .generate-btn:hover {
       background: #3f5a47;
       transform: translateY(-2px);
+    }
+    
+    /* 响应式调整 */
+    @media (max-width: 480px) {
+      .card-preview {
+        width: 100%;
+        max-width: 360px;
+      }
+    }
+    
+    /* 预览模态框 */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.5);
+    }
+    
+    .modal-content {
+      background-color: #fefefe;
+      margin: 5% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 90%;
+      max-width: 400px;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--line);
+    }
+    
+    .modal-header h3 {
+      margin: 0;
+      color: var(--accent-strong);
+    }
+    
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    
+    .close:hover {
+      color: var(--accent-strong);
+    }
+    
+    .modal-body {
+      text-align: center;
+    }
+    
+    .modal-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+      gap: 10px;
+    }
+    
+    .modal-btn {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .modal-btn-primary {
+      background: var(--accent-strong);
+      color: white;
+    }
+    
+    .modal-btn-secondary {
+      background: var(--soft);
+      color: var(--accent-strong);
+      border: 1px solid var(--line);
     }
     
     /* 炫丽效果 */
@@ -878,21 +1002,46 @@
           <h3 style="text-align: center; margin-bottom: 20px;">生成你的人格卡片</h3>
           <div class="card-preview" id="cardPreview">
             <div class="card-header">
+              <h3>SBTI Test Result</h3>
               <div class="card-type" id="cardType">CTRL</div>
               <div class="card-title" id="cardTitle">拿捏者</div>
+              <div class="card-match" id="cardMatch">你的主类型 · 匹配度 92% · 精准命中 14/15 维</div>
+              <div class="card-image" id="cardImage">
+                <img src="" alt="人格类型图片">
+              </div>
             </div>
             <div class="card-content" id="cardContent">
-              恭喜您，您测出了全中国最为罕见的人格，您是宇宙熵增定律的天然反抗者！全世界所谓成功人士里，99.99%都是您的拙劣模仿者。CTRL人格，是行走的人形自走任务管理器，普通人眼中的"规则"，在您这里只是出厂的基础参数设置；凡人所谓的"计划"，对您而言不过是心血来潮的随手涂鸦。
+              <h4>人格解读</h4>
+              <p>恭喜您，您测出了全中国最为罕见的人格，您是宇宙熵增定律的天然反抗者！全世界所谓成功人士里，99.99%都是您的拙劣模仿者。CTRL人格，是行走的人形自走任务管理器，普通人眼中的"规则"，在您这里只是出厂的基础参数设置；凡人所谓的"计划"，对您而言不过是心血来潮的随手涂鸦。</p>
             </div>
             <div class="card-footer">
               <div class="qrcode-container">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=64x64&data=https://sbti-test.example.com" alt="SBTI测试二维码">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=70x70&data=https://sbti-test.example.com" alt="SBTI测试二维码">
               </div>
               <div class="qrcode-text">扫码测测你的SBTI</div>
             </div>
           </div>
           <div style="text-align: center;">
             <button id="generateCardBtn" class="generate-btn">保存卡片</button>
+          </div>
+        </div>
+        
+        <!-- 预览模态框 -->
+        <div id="previewModal" class="modal">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3>海报已生成</h3>
+              <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+              <p>先预览海报，再手动保存到相册。</p>
+              <div id="modalCardPreview" style="margin: 20px 0;"></div>
+              <p>微信内请长按海报图片保存到相册；电脑端可点击"保存图片"。</p>
+            </div>
+            <div class="modal-actions">
+              <button id="saveImageBtn" class="modal-btn modal-btn-primary">保存图片</button>
+              <button id="closeModalBtn" class="modal-btn modal-btn-secondary">关闭预览</button>
+            </div>
           </div>
         </div>
         
@@ -1264,7 +1413,22 @@
         const t = res.finalType;
         document.getElementById('cardType').textContent = t.code;
         document.getElementById('cardTitle').textContent = t.cn;
-        document.getElementById('cardContent').textContent = t.desc;
+        document.getElementById('cardMatch').textContent = res.badge;
+        
+        // 更新人格解读
+        const cardContent = document.getElementById('cardContent');
+        cardContent.innerHTML = `<h4>人格解读</h4><p>${t.desc}</p>`;
+        
+        // 添加人格类型图片
+        const cardImage = document.querySelector('#cardImage img');
+        const src = TYPE_IMAGES[t.code];
+        if (src) {
+          cardImage.src = src;
+          cardImage.alt = `${t.code}（${t.cn}）`;
+        } else {
+          cardImage.src = '';
+          cardImage.alt = '';
+        }
       }
 
       function showResult() {
@@ -1312,22 +1476,59 @@
       // 生成并下载卡片图片
       function generateAndDownloadCard() {
         // 使用html2canvas库将卡片预览转换为图片
-        // 由于我们没有实际引入html2canvas，这里使用一个模拟的下载功能
-        alert('卡片生成功能需要html2canvas库支持，这里仅作演示。实际应用中，这里会将卡片预览转换为图片并下载。');
+        if (typeof html2canvas === 'undefined') {
+          alert('卡片生成功能需要html2canvas库支持，请确保网络连接正常。');
+          return;
+        }
         
-        // 实际实现代码（需要引入html2canvas库）：
-        /*
-        html2canvas(document.getElementById('cardPreview')).then(canvas => {
-          const link = document.createElement('a');
-          link.download = `SBTI-${document.getElementById('cardType').textContent}.png`;
-          link.href = canvas.toDataURL();
-          link.click();
+        html2canvas(document.getElementById('cardPreview'), {
+          useCORS: true,
+          logging: false,
+          scale: 2
+        }).then(canvas => {
+          // 显示预览模态框
+          const modal = document.getElementById('previewModal');
+          const modalPreview = document.getElementById('modalCardPreview');
+          modalPreview.innerHTML = '';
+          modalPreview.appendChild(canvas);
+          modal.style.display = 'block';
+          
+          // 保存图片按钮点击事件
+          document.getElementById('saveImageBtn').onclick = function() {
+            const link = document.createElement('a');
+            link.download = `SBTI-${document.getElementById('cardType').textContent}.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+          };
+        }).catch(error => {
+          alert('卡片生成失败，请重试。');
+          console.error('Error generating card:', error);
         });
-        */
       }
+      
+      // 模态框关闭事件
+      document.querySelector('.close').onclick = function() {
+        document.getElementById('previewModal').style.display = 'none';
+      };
+      
+      document.getElementById('closeModalBtn').onclick = function() {
+        document.getElementById('previewModal').style.display = 'none';
+      };
+      
+      // 点击模态框外部关闭
+      window.onclick = function(event) {
+        const modal = document.getElementById('previewModal');
+        if (event.target == modal) {
+          modal.style.display = 'none';
+        }
+      };
 
       // 事件绑定
-      startBtn.addEventListener('click', startTest);
+      startBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        startTest();
+      });
+      
       restartBtn.addEventListener('click', startTest);
       backIntroBtn.addEventListener('click', () => showScreen('intro'));
       toTopBtn.addEventListener('click', () => showScreen('intro'));
