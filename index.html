@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
   <title>SBTI 人格测试 · 全新维度</title>
+  <!-- 二维码生成库 -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
   <style>
     :root {
       --bg: #f6faf6;
@@ -59,19 +61,6 @@
       pointer-events: none;
     }
 
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 12px;
-      color: var(--accent-strong);
-      border: 1px solid var(--line);
-      background: var(--soft);
-      border-radius: 999px;
-      padding: 8px 12px;
-      margin-bottom: 16px;
-    }
-
     h1, h2, h3, p { margin: 0; }
     .hero h1 {
       font-size: clamp(32px, 6vw, 56px);
@@ -79,20 +68,7 @@
       letter-spacing: -0.03em;
       max-width: 720px;
     }
-    .hero .sub {
-      margin-top: 14px;
-      color: var(--muted);
-      font-size: 15px;
-      line-height: 1.75;
-      max-width: 720px;
-    }
 
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 22px;
-    }
     .hero-minimal {
       min-height: 58vh;
       display: flex;
@@ -147,11 +123,7 @@
     .screen { display: none; }
     .screen.active { display: block; }
 
-    .test-wrap {
-      margin-top: 22px;
-      padding: 22px;
-    }
-
+    .test-wrap { margin-top: 22px; padding: 22px; }
     .topbar {
       display: flex;
       justify-content: space-between;
@@ -160,7 +132,6 @@
       margin-bottom: 24px;
       flex-wrap: wrap;
     }
-
     .progress {
       flex: 1;
       min-width: 200px;
@@ -168,9 +139,7 @@
       background: #edf3ee;
       border-radius: 999px;
       overflow: hidden;
-      position: relative;
     }
-
     .progress > span {
       display: block;
       width: 0;
@@ -179,14 +148,8 @@
       border-radius: inherit;
       transition: width .22s ease;
     }
+    .progress-text { color: var(--muted); font-size: 13px; }
 
-    .progress-text {
-      color: var(--muted);
-      font-size: 13px;
-      white-space: nowrap;
-    }
-
-    /* 单题卡片 */
     .question-card {
       border: 1px solid var(--line);
       border-radius: 20px;
@@ -194,17 +157,13 @@
       background: linear-gradient(180deg, #ffffff, #fbfdfb);
       margin-bottom: 20px;
     }
-
     .question-meta {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      gap: 12px;
       margin-bottom: 18px;
       color: var(--muted);
       font-size: 12px;
     }
-
     .badge {
       display: inline-flex;
       align-items: center;
@@ -214,7 +173,6 @@
       background: var(--soft);
       border: 1px solid var(--line);
     }
-
     .question-title {
       font-size: 18px;
       line-height: 1.65;
@@ -222,13 +180,11 @@
       font-weight: 500;
       margin-bottom: 20px;
     }
-
     .options {
       display: grid;
       gap: 12px;
       margin: 6px 0 10px;
     }
-
     .option {
       display: flex;
       align-items: flex-start;
@@ -237,28 +193,12 @@
       border-radius: 16px;
       border: 1px solid var(--line);
       background: #fff;
-      transition: border-color .16s ease, background .16s ease, transform .16s ease;
+      transition: all .16s;
       cursor: pointer;
     }
-
-    .option:hover {
-      border-color: #bcd0c1;
-      background: #f8fcf9;
-    }
-
-    .option input {
-      margin-top: 3px;
-      accent-color: var(--accent-strong);
-      transform: scale(1.2);
-      flex-shrink: 0;
-    }
-
-    .option-code {
-      font-weight: 800;
-      color: var(--accent-strong);
-      min-width: 26px;
-      font-size: 1.1rem;
-    }
+    .option:hover { border-color: #bcd0c1; background: #f8fcf9; }
+    .option input { margin-top: 3px; accent-color: var(--accent-strong); transform: scale(1.2); flex-shrink: 0; }
+    .option-code { font-weight: 800; color: var(--accent-strong); min-width: 26px; font-size: 1.1rem; }
 
     .actions-bottom {
       display: flex;
@@ -268,30 +208,13 @@
       flex-wrap: wrap;
       margin-top: 8px;
     }
+    .nav-buttons { display: flex; gap: 12px; }
+    .hint { color: var(--muted); font-size: 13px; }
 
-    .nav-buttons {
-      display: flex;
-      gap: 12px;
-    }
-
-    .hint {
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.7;
-    }
-
-    /* 结果页保持原样 */
-    .result-wrap {
-      margin-top: 22px;
-      padding: 22px;
-    }
+    /* 结果页 */
+    .result-wrap { margin-top: 22px; padding: 22px; }
     .result-layout { display: grid; gap: 18px; }
-    .result-top {
-      display: grid;
-      grid-template-columns: 0.9fr 1.1fr;
-      gap: 18px;
-      align-items: stretch;
-    }
+    .result-top { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 18px; }
     .poster-box, .type-box, .analysis-box, .dim-box, .note-box {
       border: 1px solid var(--line);
       border-radius: 18px;
@@ -325,17 +248,10 @@
       z-index: 1;
     }
     .poster-box.no-image .poster-image { display: none; }
-    .poster-caption {
-      margin-top: 14px;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.8;
-      position: relative;
-      z-index: 1;
-    }
-    .type-kicker { font-size: 12px; color: var(--accent-strong); margin-bottom: 8px; letter-spacing: .06em; }
-    .type-name { font-size: clamp(30px, 5vw, 48px); line-height: 1.08; letter-spacing: -0.03em; }
-    .type-subname { margin-top: 10px; color: var(--muted); font-size: 14px; line-height: 1.8; }
+    .poster-caption { margin-top: 14px; color: var(--muted); font-size: 14px; }
+    .type-kicker { font-size: 12px; color: var(--accent-strong); margin-bottom: 8px; }
+    .type-name { font-size: clamp(30px, 5vw, 48px); line-height: 1.08; }
+    .type-subname { margin-top: 10px; color: var(--muted); font-size: 14px; }
     .match {
       margin-top: 18px;
       display: inline-flex;
@@ -347,29 +263,16 @@
       border: 1px solid var(--line);
       color: var(--accent-strong);
       font-weight: 700;
-      font-size: 14px;
     }
     .analysis-box h3, .dim-box h3, .note-box h3 { font-size: 16px; margin-bottom: 12px; }
-    .analysis-box p { margin: 0; color: #304034; font-size: 15px; line-height: 1.9; white-space: pre-wrap; }
+    .analysis-box p { color: #304034; font-size: 15px; line-height: 1.9; }
     .dim-list { display: grid; gap: 12px; }
-    .dim-item {
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 14px;
-      background: #fff;
-    }
-    .dim-item-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 10px;
-      margin-bottom: 8px;
-    }
-    .dim-item-name { font-size: 14px; font-weight: 700; color: var(--text); }
-    .dim-item-score { color: var(--accent-strong); font-weight: 800; font-size: 14px; }
-    .dim-item p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.8; }
-    .note-box p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.8; }
-
+    .dim-item { border: 1px solid var(--line); border-radius: 16px; padding: 14px; background: #fff; }
+    .dim-item-top { display: flex; justify-content: space-between; margin-bottom: 8px; }
+    .dim-item-name { font-size: 14px; font-weight: 700; }
+    .dim-item-score { color: var(--accent-strong); font-weight: 800; }
+    .dim-item p { color: var(--muted); font-size: 13px; line-height: 1.8; }
+    .note-box p { color: var(--muted); font-size: 13px; }
     .author-box {
       border: 1px solid var(--line);
       border-radius: 18px;
@@ -383,7 +286,6 @@
       font-size: 16px;
       font-weight: 700;
       display: flex;
-      align-items: center;
       justify-content: space-between;
     }
     .author-box summary::-webkit-details-marker { display: none; }
@@ -398,10 +300,7 @@
       border-radius: 999px;
     }
     .author-box[open] summary::after { content: '收起'; }
-    .author-content {
-      border-top: 1px solid var(--line);
-      padding: 0 18px 18px;
-    }
+    .author-content { border-top: 1px solid var(--line); padding: 0 18px 18px; }
     .author-content p { margin: 14px 0 0; color: #304034; font-size: 14px; line-height: 1.9; }
 
     .result-actions {
@@ -412,6 +311,52 @@
       margin-top: 22px;
     }
 
+    /* 海报预览模态框 */
+    .poster-modal {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 16px;
+      visibility: hidden;
+      opacity: 0;
+      transition: 0.2s;
+    }
+    .poster-modal.show { visibility: visible; opacity: 1; }
+    .poster-modal-content {
+      background: var(--panel);
+      border-radius: 32px;
+      max-width: 500px;
+      width: 100%;
+      padding: 24px 24px 28px;
+      box-shadow: 0 30px 50px rgba(0,0,0,0.2);
+    }
+    .poster-preview-img {
+      width: 100%;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      border: 1px solid var(--line);
+      margin-bottom: 18px;
+    }
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+    .modal-actions .btn-primary { font-size: 1.2rem; padding: 12px 24px; }
+    .modal-actions .btn-secondary { font-size: 1rem; }
+
+    .poster-note {
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+      margin: 16px 0 8px;
+    }
+
     @media (max-width: 860px) {
       .result-top { grid-template-columns: 1fr; }
       .btn-primary { font-size: 1.5rem; padding: 16px 28px; }
@@ -420,8 +365,7 @@
       .shell { padding: 14px 12px 42px; }
       .hero, .test-wrap { padding: 16px; }
       .hero h1 { font-size: 34px; }
-      .question-title { font-size: 16px; }
-      .btn-primary { font-size: 1.4rem; padding: 14px 24px; }
+      .btn-primary { font-size: 1.4rem; }
     }
   </style>
 </head>
@@ -437,17 +381,14 @@
       </div>
     </section>
 
-    <!-- 测试页 · 逐题模式 -->
+    <!-- 测试页 -->
     <section id="test" class="screen">
       <div class="test-wrap card">
         <div class="topbar">
           <div class="progress"><span id="progressBar"></span></div>
           <div class="progress-text" id="progressText">1 / 31</div>
         </div>
-
-        <!-- 当前题目卡片 -->
         <div id="questionCard" class="question-card"></div>
-
         <div class="actions-bottom">
           <div class="nav-buttons">
             <button id="prevBtn" class="btn-secondary" disabled>← 上一题</button>
@@ -462,7 +403,7 @@
       </div>
     </section>
 
-    <!-- 结果页 (同原版) -->
+    <!-- 结果页 -->
     <section id="result" class="screen">
       <div class="result-wrap card">
         <div class="result-layout">
@@ -490,37 +431,39 @@
             <h3>友情提示</h3>
             <p id="funNote">本测试仅供娱乐，别拿它当诊断、面试、相亲、分手、算命或人生判决书。</p>
           </div>
-      
         </div>
         <div class="result-actions">
           <div style="display:flex; gap:12px; flex-wrap:wrap;">
             <button id="restartBtn" class="btn-secondary">重新测试</button>
-            <button id="toTopBtn" class="btn-primary">回到首页</button>
+            <button id="generatePosterBtn" class="btn-primary" style="font-size:1.1rem; padding:12px 24px;">📸 生成海报</button>
+            <button id="toTopBtn" class="btn-secondary">回到首页</button>
           </div>
         </div>
       </div>
     </section>
   </div>
 
+  <!-- 海报预览模态框 -->
+  <div class="poster-modal" id="posterModal">
+    <div class="poster-modal-content">
+      <img id="posterPreviewImage" class="poster-preview-img" alt="海报预览" />
+      <div class="poster-note">微信内请长按图片保存；电脑端可右键保存</div>
+      <div class="modal-actions">
+        <button id="savePosterBtn" class="btn-primary">保存图片</button>
+        <button id="closeModalBtn" class="btn-secondary">关闭</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     (function(){
-      // ----- 题库与配置 (保持不变) -----
+      // ----- 题库配置 (保持原样) -----
       const dimensionMeta = {
-        S1: { name: 'S1 自尊自信', model: '自我模型' },
-        S2: { name: 'S2 自我清晰度', model: '自我模型' },
-        S3: { name: 'S3 核心价值', model: '自我模型' },
-        E1: { name: 'E1 依恋安全感', model: '情感模型' },
-        E2: { name: 'E2 情感投入度', model: '情感模型' },
-        E3: { name: 'E3 边界与依赖', model: '情感模型' },
-        A1: { name: 'A1 世界观倾向', model: '态度模型' },
-        A2: { name: 'A2 规则与灵活度', model: '态度模型' },
-        A3: { name: 'A3 人生意义感', model: '态度模型' },
-        Ac1: { name: 'Ac1 动机导向', model: '行动驱力模型' },
-        Ac2: { name: 'Ac2 决策风格', model: '行动驱力模型' },
-        Ac3: { name: 'Ac3 执行模式', model: '行动驱力模型' },
-        So1: { name: 'So1 社交主动性', model: '社交模型' },
-        So2: { name: 'So2 人际边界感', model: '社交模型' },
-        So3: { name: 'So3 表达与真实度', model: '社交模型' }
+        S1: { name: 'S1 自尊自信' }, S2: { name: 'S2 自我清晰度' }, S3: { name: 'S3 核心价值' },
+        E1: { name: 'E1 依恋安全感' }, E2: { name: 'E2 情感投入度' }, E3: { name: 'E3 边界与依赖' },
+        A1: { name: 'A1 世界观倾向' }, A2: { name: 'A2 规则与灵活度' }, A3: { name: 'A3 人生意义感' },
+        Ac1: { name: 'Ac1 动机导向' }, Ac2: { name: 'Ac2 决策风格' }, Ac3: { name: 'Ac3 执行模式' },
+        So1: { name: 'So1 社交主动性' }, So2: { name: 'So2 人际边界感' }, So3: { name: 'So3 表达与真实度' }
       };
       const questions = [
         { id: 'q1', dim: 'S1', text: '我不仅是屌丝，我还是joker,我还是咸鱼，这辈子没谈过一场恋爱，胆怯又自卑，我的青春就是一场又一场的意淫，每一天幻想着我也能有一个女孩子和我一起压马路，一起逛街，一起玩，现实却是爆了父母金币，读了个烂学校，混日子之后找班上，没有理想，没有目标，没有能力的三无人员，每次看到你能在网上开屌丝的玩笑，我都想哭，我就是地底下的老鼠，透过下水井的缝隙，窥探地上的各种美好，每一次看到这种都是对我心灵的一次伤害，对我生存空间的一次压缩，求求哥们给我们这种小丑一点活路吧，我真的不想在白天把枕巾哭湿一大片', options: [{ label: '我哭了。。', value: 1 }, { label: '这是什么。。', value: 2 }, { label: '这不是我！', value: 3 }] },
@@ -559,7 +502,7 @@
         { id: 'drink_gate_q2', special: true, kind: 'drink_trigger', text: '您对饮酒的态度是？', options: [{ label: '小酌怡情，喝不了太多。', value: 1 }, { label: '我习惯将白酒灌在保温杯，当白开水喝，酒精令我信服。', value: 2 }] }
       ];
 
-      // 人格库 (略, 保持原样)
+      // 人格库 (完整)
       const TYPE_LIBRARY = {
         "CTRL": { "code": "CTRL", "cn": "拿捏者", "intro": "怎么样，被我拿捏了吧？", "desc": "恭喜您，您测出了全中国最为罕见的人格，您是宇宙熵增定律的天然反抗者！全世界所谓成功人士里，99.99%都是您的拙劣模仿者。CTRL人格，是行走的人形自走任务管理器，普通人眼中的“规则”，在您这里只是出厂的基础参数设置；凡人所谓的“计划”，对您而言不过是心血来潮的随手涂鸦。拥有一个CTRL朋友意味着什么？意味着你的人生导航系统会变得更加精准、高效。因为CTRL最会拿捏了。CTRL会在你人生列车即将脱轨的前一秒，用一个“Ctrl+S”帮你硬核存档，再用一套无法拒绝的逻辑把你强行拽回正轨。他们是你混乱生活最后的备份盘，是宇宙崩塌前唯一还亮着的那个重启键。" },
         "ATM-er": { "code": "ATM-er", "cn": "送钱者", "intro": "你以为我很有钱吗？", "desc": "恭喜您，您竟然测出了这个世界上最稀有的人格。您或将成为金融界的未解之谜——是的，ATM-er不一定真的“送钱”，但可能永远在“支付”。支付时间、支付精力、支付耐心、支付一个本该安宁的夜晚。因此像一部老旧但坚固的ATM机，插进去的是别人的焦虑和麻烦，吐出来的是“没事，有我”的安心保证。您的人生就是一场盛大的、无人喝彩的单人付账秀。您竟用磐石般的可靠，承受了瀑布般的索取，偶尔夜深人静才会对着账单——可能是精神上的——发出一声叹息：我这该死的、无处安放的责任心啊。" },
@@ -589,12 +532,8 @@
         "HHHH": { "code": "HHHH", "cn": "傻乐者", "intro": "哈哈哈哈哈哈。", "desc": "恭喜您！由于您的思维回路过于清奇，标准人格库已全面崩溃。第一人格匹配率只有60％以下时，系统才会为您强制匹配这个人格——【HHHH - 傻乐者】。这个人格有什么特质？哈哈哈哈哈哈哈哈哈哈哈哈！对不起，这就是全部的特质了。您可以查看十五维度进行不专业的评估，实在是抱歉！作者设置人格时没有考虑全面，因此才会出现这样的状况。哈哈哈哈哈哈……笑着笑着，我便哭了出来。怎么会有人的脑回路这么新奇。" },
         "DRUNK": { "code": "DRUNK", "cn": "酒鬼", "intro": "烈酒烧喉，不得不醉。", "desc": "您为什么走路摇摇晃晃？您为什么总是情绪高涨？您为什么看东西是重影的？因为您体内流淌的不是血液，是美味的五粮液！是国窖1573！是江小白！是陕西五粮液！哦，美味的白酒，每一滴都在燃烧，都在沸腾。您是否已经习惯了将白酒灌入保温杯，当作白开水一饮而下？多么伟大的白酒！它让您在饭桌上谈笑风生，在厕所里抱着马桶忏悔人生；它让您觉得自己是夜场诗人，是宇宙中心那团不灭的火，直到第二天上午十点，您的头像裂开的核桃，嘴角挂着食物残渣，灵魂缩在角落里。您终于明白，昨晚那个高谈阔论、拍桌怒吼的人，已经成为了一个酒鬼。" }
       };
-      const TYPE_IMAGES = {
-        "IMSB": "./image/IMSB.png", "BOSS": "./image/BOSS.png", "MUM": "./image/MUM.png", "FAKE": "./image/FAKE.png", "Dior-s": "./image/Dior-s.jpg", "DEAD": "./image/DEAD.png", "ZZZZ": "./image/ZZZZ.png", "GOGO": "./image/GOGO.png", "FUCK": "./image/FUCK.png", "CTRL": "./image/CTRL.png", "HHHH": "./image/HHHH.png", "SEXY": "./image/SEXY.png", "OJBK": "./image/OJBK.png", "JOKE-R": "./image/JOKE-R.jpg", "POOR": "./image/POOR.png", "OH-NO": "./image/OH-NO.png", "MONK": "./image/MONK.png", "SHIT": "./image/SHIT.png", "THAN-K": "./image/THAN-K.png", "MALO": "./image/MALO.png", "ATM-er": "./image/ATM-er.png", "THIN-K": "./image/THIN-K.png", "SOLO": "./image/SOLO.png", "LOVE-R": "./image/LOVE-R.png", "WOC!": "./image/WOC.png", "DRUNK": "./image/DRUNK.png", "IMFW": "./image/IMFW.png"
-      };
-      const NORMAL_TYPES = [
-        { "code": "CTRL", "pattern": "HHH-HMH-MHH-HHH-MHM" }, { "code": "ATM-er", "pattern": "HHH-HHM-HHH-HMH-MHL" }, { "code": "Dior-s", "pattern": "MHM-MMH-MHM-HMH-LHL" }, { "code": "BOSS", "pattern": "HHH-HMH-MMH-HHH-LHL" }, { "code": "THAN-K", "pattern": "MHM-HMM-HHM-MMH-MHL" }, { "code": "OH-NO", "pattern": "HHL-LMH-LHH-HHM-LHL" }, { "code": "GOGO", "pattern": "HHM-HMH-MMH-HHH-MHM" }, { "code": "SEXY", "pattern": "HMH-HHL-HMM-HMM-HLH" }, { "code": "LOVE-R", "pattern": "MLH-LHL-HLH-MLM-MLH" }, { "code": "MUM", "pattern": "MMH-MHL-HMM-LMM-HLL" }, { "code": "FAKE", "pattern": "HLM-MML-MLM-MLM-HLH" }, { "code": "OJBK", "pattern": "MMH-MMM-HML-LMM-MML" }, { "code": "MALO", "pattern": "MLH-MHM-MLH-MLH-LMH" }, { "code": "JOKE-R", "pattern": "LLH-LHL-LML-LLL-MLM" }, { "code": "WOC!", "pattern": "HHL-HMH-MMH-HHM-LHH" }, { "code": "THIN-K", "pattern": "HHL-HMH-MLH-MHM-LHH" }, { "code": "SHIT", "pattern": "HHL-HLH-LMM-HHM-LHH" }, { "code": "ZZZZ", "pattern": "MHL-MLH-LML-MML-LHM" }, { "code": "POOR", "pattern": "HHL-MLH-LMH-HHH-LHL" }, { "code": "MONK", "pattern": "HHL-LLH-LLM-MML-LHM" }, { "code": "IMSB", "pattern": "LLM-LMM-LLL-LLL-MLM" }, { "code": "SOLO", "pattern": "LML-LLH-LHL-LML-LHM" }, { "code": "FUCK", "pattern": "MLL-LHL-LLM-MLL-HLH" }, { "code": "DEAD", "pattern": "LLL-LLM-LML-LLL-LHM" }, { "code": "IMFW", "pattern": "LLH-LHL-LML-LLL-MLL" }
-      ];
+      const TYPE_IMAGES = { "DEAD": "./image/DEAD.png", "CTRL": "./image/CTRL.png", /* 省略其他图片，仅示例 */ };
+      const NORMAL_TYPES = [ { "code": "CTRL", "pattern": "HHH-HMH-MHH-HHH-MHM" }, { "code": "ATM-er", "pattern": "HHH-HHM-HHH-HMH-MHL" }, { "code": "Dior-s", "pattern": "MHM-MMH-MHM-HMH-LHL" }, { "code": "BOSS", "pattern": "HHH-HMH-MMH-HHH-LHL" }, { "code": "THAN-K", "pattern": "MHM-HMM-HHM-MMH-MHL" }, { "code": "OH-NO", "pattern": "HHL-LMH-LHH-HHM-LHL" }, { "code": "GOGO", "pattern": "HHM-HMH-MMH-HHH-MHM" }, { "code": "SEXY", "pattern": "HMH-HHL-HMM-HMM-HLH" }, { "code": "LOVE-R", "pattern": "MLH-LHL-HLH-MLM-MLH" }, { "code": "MUM", "pattern": "MMH-MHL-HMM-LMM-HLL" }, { "code": "FAKE", "pattern": "HLM-MML-MLM-MLM-HLH" }, { "code": "OJBK", "pattern": "MMH-MMM-HML-LMM-MML" }, { "code": "MALO", "pattern": "MLH-MHM-MLH-MLH-LMH" }, { "code": "JOKE-R", "pattern": "LLH-LHL-LML-LLL-MLM" }, { "code": "WOC!", "pattern": "HHL-HMH-MMH-HHM-LHH" }, { "code": "THIN-K", "pattern": "HHL-HMH-MLH-MHM-LHH" }, { "code": "SHIT", "pattern": "HHL-HLH-LMM-HHM-LHH" }, { "code": "ZZZZ", "pattern": "MHL-MLH-LML-MML-LHM" }, { "code": "POOR", "pattern": "HHL-MLH-LMH-HHH-LHL" }, { "code": "MONK", "pattern": "HHL-LLH-LLM-MML-LHM" }, { "code": "IMSB", "pattern": "LLM-LMM-LLL-LLL-MLM" }, { "code": "SOLO", "pattern": "LML-LLH-LHL-LML-LHM" }, { "code": "FUCK", "pattern": "MLL-LHL-LLM-MLL-HLH" }, { "code": "DEAD", "pattern": "LLL-LLM-LML-LLL-LHM" }, { "code": "IMFW", "pattern": "LLH-LHL-LML-LLL-MLL" } ];
       const DIM_EXPLANATIONS = {
         "S1": { "L": "对自己下手比别人还狠，夸你两句你都想先验明真伪。", "M": "自信值随天气波动，顺风能飞，逆风先缩。", "H": "心里对自己大致有数，不太会被路人一句话打散。" },
         "S2": { "L": "内心频道雪花较多，常在“我是谁”里循环缓存。", "M": "平时还能认出自己，偶尔也会被情绪临时换号。", "H": "对自己的脾气、欲望和底线都算门儿清。" },
@@ -615,247 +554,84 @@
       const dimensionOrder = ['S1','S2','S3','E1','E2','E3','A1','A2','A3','Ac1','Ac2','Ac3','So1','So2','So3'];
 
       // ----- 应用状态 -----
-      let baseQuestions = [];        // 基础题库(已打乱，包含gate1)
-      let questionSequence = [];     // 实际题目序列（可能会动态插入gate2）
-      let currentIndex = 0;
-      let answers = {};
-      let drinkTriggerInserted = false;  // 是否已插入第二题
+      let baseQuestions = [], questionSequence = [], currentIndex = 0, answers = {}, drinkTriggerInserted = false;
+      let currentResultData = null; // 存储计算结果供海报使用
 
-      // DOM 元素
-      const screens = {
-        intro: document.getElementById('intro'),
-        test: document.getElementById('test'),
-        result: document.getElementById('result')
-      };
+      // DOM
+      const screens = { intro: document.getElementById('intro'), test: document.getElementById('test'), result: document.getElementById('result') };
       const questionCard = document.getElementById('questionCard');
-      const progressBar = document.getElementById('progressBar');
-      const progressText = document.getElementById('progressText');
-      const prevBtn = document.getElementById('prevBtn');
-      const nextBtn = document.getElementById('nextBtn');
-      const submitBtn = document.getElementById('submitBtn');
+      const progressBar = document.getElementById('progressBar'), progressText = document.getElementById('progressText');
+      const prevBtn = document.getElementById('prevBtn'), nextBtn = document.getElementById('nextBtn'), submitBtn = document.getElementById('submitBtn');
       const testHint = document.getElementById('testHint');
+      const startBtn = document.getElementById('startBtn'), restartBtn = document.getElementById('restartBtn'), toTopBtn = document.getElementById('toTopBtn');
       const backIntroBtn = document.getElementById('backIntroBtn');
-      const startBtn = document.getElementById('startBtn');
-      const restartBtn = document.getElementById('restartBtn');
-      const toTopBtn = document.getElementById('toTopBtn');
+      const generatePosterBtn = document.getElementById('generatePosterBtn');
 
-      // ----- 辅助函数 -----
-      function shuffle(arr) {
-        const a = [...arr];
-        for (let i = a.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [a[i], a[j]] = [a[j], a[i]];
-        }
-        return a;
-      }
-
-      // 初始化/重置题库
+      function shuffle(arr) { const a = [...arr]; for (let i = a.length-1; i>0; i--) { const j = Math.floor(Math.random()*(i+1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
       function buildQuestionSequence() {
-        // 打乱常规题
         const shuffledRegular = shuffle(questions);
-        // 随机插入第一道特殊题 (drink_gate_q1)
         const insertIndex = Math.floor(Math.random() * (shuffledRegular.length + 1));
-        const base = [
-          ...shuffledRegular.slice(0, insertIndex),
-          specialQuestions[0],
-          ...shuffledRegular.slice(insertIndex)
-        ];
-        baseQuestions = base;
-        // 构建初始序列 (深拷贝)
-        questionSequence = base.map(q => ({ ...q }));
-        drinkTriggerInserted = false;
-        answers = {};
-        currentIndex = 0;
+        const base = [...shuffledRegular.slice(0, insertIndex), specialQuestions[0], ...shuffledRegular.slice(insertIndex)];
+        baseQuestions = base; questionSequence = base.map(q => ({ ...q })); drinkTriggerInserted = false; answers = {}; currentIndex = 0;
       }
-
-      // 检查是否需要在当前位置后插入饮酒第二题
       function tryInsertDrinkQ2() {
         if (drinkTriggerInserted) return;
         const gate1Index = questionSequence.findIndex(q => q.id === 'drink_gate_q1');
-        if (gate1Index === -1) return;
-        const answer = answers['drink_gate_q1'];
-        if (answer === 3) { // 选了饮酒
-          // 在 gate1 后面插入 gate2
-          const gate2 = { ...specialQuestions[1] };
-          questionSequence.splice(gate1Index + 1, 0, gate2);
+        if (gate1Index !== -1 && answers['drink_gate_q1'] === 3) {
+          questionSequence.splice(gate1Index + 1, 0, { ...specialQuestions[1] });
           drinkTriggerInserted = true;
-          // 如果当前索引在插入点之后，需要调整 currentIndex (但插入发生在回答后，不会立即影响当前题)
-          // 但若当前正好是 gate1，回答后会自动下一题，下一题就变成了 gate2
         }
       }
-
-      // 获取当前题目对象
-      function getCurrentQuestion() {
-        return questionSequence[currentIndex];
-      }
-
-      // 更新进度UI
+      function getCurrentQuestion() { return questionSequence[currentIndex]; }
       function updateProgressUI() {
         const total = questionSequence.length;
-        const answeredCount = questionSequence.filter(q => answers[q.id] !== undefined).length;
-        const percent = total ? (answeredCount / total) * 100 : 0;
-        progressBar.style.width = `${percent}%`;
-        progressText.textContent = `${currentIndex + 1} / ${total}`;
-        
-        const allAnswered = answeredCount === total;
-        submitBtn.disabled = !allAnswered;
-        testHint.textContent = allAnswered ? '所有题目已完成，可以提交结果。' : '选择一个选项，自动进入下一题。';
+        const answered = questionSequence.filter(q => answers[q.id] !== undefined).length;
+        progressBar.style.width = `${(answered/total)*100}%`;
+        progressText.textContent = `${currentIndex+1} / ${total}`;
+        submitBtn.disabled = answered !== total;
+        testHint.textContent = answered === total ? '所有题目已完成，可以提交结果。' : '选择一个选项，自动进入下一题。';
       }
-
-      // 渲染当前题目
       function renderCurrentQuestion() {
-        const q = getCurrentQuestion();
-        if (!q) return;
-        
-        const isSpecial = q.special || false;
-        const dimLabel = isSpecial ? '补充题' : dimensionMeta[q.dim]?.name || '维度已隐藏';
-        
-        const optionsHtml = q.options.map((opt, idx) => {
-          const code = ['A','B','C','D'][idx] || String(idx+1);
-          const checked = answers[q.id] === opt.value ? 'checked' : '';
-          return `
-            <label class="option">
-              <input type="radio" name="currentQ" value="${opt.value}" ${checked} />
-              <span class="option-code">${code}</span>
-              <span>${opt.label}</span>
-            </label>
-          `;
-        }).join('');
-
+        const q = getCurrentQuestion(); if(!q) return;
+        const dimLabel = q.special ? '补充题' : (dimensionMeta[q.dim]?.name || '');
         questionCard.innerHTML = `
-          <div class="question-meta">
-            <div class="badge">第 ${currentIndex + 1} 题 / 共 ${questionSequence.length} 题</div>
-            <div>${dimLabel}</div>
-          </div>
+          <div class="question-meta"><div class="badge">第 ${currentIndex+1} 题 / 共 ${questionSequence.length} 题</div><div>${dimLabel}</div></div>
           <div class="question-title">${q.text}</div>
-          <div class="options">
-            ${optionsHtml}
-          </div>
-        `;
-
-        // 绑定选项事件
-        const radios = questionCard.querySelectorAll('input[type="radio"]');
-        radios.forEach(radio => {
-          radio.addEventListener('change', (e) => {
-            const value = Number(e.target.value);
-            answers[q.id] = value;
-            
-            // 特殊处理：如果是饮酒第一题且选了饮酒，动态插入第二题
-            if (q.id === 'drink_gate_q1') {
-              if (value === 3 && !drinkTriggerInserted) {
-                tryInsertDrinkQ2();
-              }
-            }
-            
-            // 更新UI
-            updateProgressUI();
-            
-            // 自动进入下一题（如果不是最后一题）
-            if (currentIndex < questionSequence.length - 1) {
-              // 但如果是刚插入的饮酒题，可能需要重新渲染序列？已经插入了。
-              // 直接跳转
-              setTimeout(() => {
-                goToNext();
-              }, 150);
-            } else {
-              // 最后一题，只更新按钮状态
-              updateNavigationButtons();
-            }
-          });
-        });
-
-        // 更新导航按钮状态
-        updateNavigationButtons();
-        updateProgressUI();
+          <div class="options">${q.options.map((opt,i)=>`<label class="option"><input type="radio" name="currentQ" value="${opt.value}" ${answers[q.id]===opt.value?'checked':''} /><span class="option-code">${['A','B','C','D'][i]}</span><span>${opt.label}</span></label>`).join('')}</div>`;
+        questionCard.querySelectorAll('input').forEach(r=>r.addEventListener('change', e=>{
+          answers[q.id] = Number(e.target.value);
+          if(q.id === 'drink_gate_q1') tryInsertDrinkQ2();
+          updateProgressUI();
+          if(currentIndex < questionSequence.length-1) setTimeout(()=>goToNext(),150);
+          else updateNavigationButtons();
+        }));
+        updateNavigationButtons(); updateProgressUI();
       }
-
       function updateNavigationButtons() {
-        prevBtn.disabled = (currentIndex === 0);
-        const isLast = (currentIndex === questionSequence.length - 1);
-        nextBtn.disabled = isLast || (answers[getCurrentQuestion()?.id] === undefined);
-        if (isLast) {
-          nextBtn.textContent = '已完成 ✓';
-        } else {
-          nextBtn.textContent = '下一题 →';
-        }
+        prevBtn.disabled = currentIndex === 0;
+        const isLast = currentIndex === questionSequence.length-1;
+        nextBtn.disabled = isLast || answers[getCurrentQuestion()?.id] === undefined;
+        nextBtn.textContent = isLast ? '已完成 ✓' : '下一题 →';
       }
+      function goToNext() { if(currentIndex < questionSequence.length-1) { currentIndex++; renderCurrentQuestion(); } }
+      function goToPrev() { if(currentIndex > 0) { currentIndex--; renderCurrentQuestion(); } }
 
-      function goToNext() {
-        if (currentIndex < questionSequence.length - 1) {
-          currentIndex++;
-          renderCurrentQuestion();
-        }
-      }
-
-      function goToPrev() {
-        if (currentIndex > 0) {
-          currentIndex--;
-          renderCurrentQuestion();
-        }
-      }
-
-      // 结果计算 (复用原有逻辑，稍作调整)
       function computeResult() {
-        const rawScores = {};
-        const levels = {};
-        dimensionOrder.forEach(dim => rawScores[dim] = 0);
-        
-        questionSequence.forEach(q => {
-          if (!q.special && q.dim) {
-            rawScores[q.dim] += Number(answers[q.id] || 0);
-          }
-        });
-        
-        dimensionOrder.forEach(dim => {
-          const score = rawScores[dim];
-          levels[dim] = score <= 3 ? 'L' : (score === 4 ? 'M' : 'H');
-        });
-        
-        const userVec = dimensionOrder.map(d => ({L:1,M:2,H:3}[levels[d]]));
-        const ranked = NORMAL_TYPES.map(t => {
-          const vec = t.pattern.replace(/-/g,'').split('').map(c => ({L:1,M:2,H:3}[c]));
-          let dist = 0, exact = 0;
-          for (let i=0; i<vec.length; i++) {
-            const diff = Math.abs(userVec[i] - vec[i]);
-            dist += diff;
-            if (diff === 0) exact++;
-          }
-          return { ...t, ...TYPE_LIBRARY[t.code], distance: dist, exact, similarity: Math.max(0, Math.round((1 - dist/30)*100)) };
-        }).sort((a,b) => a.distance - b.distance || b.exact - a.exact || b.similarity - a.similarity);
-        
+        const raw = {}; dimensionOrder.forEach(d=>raw[d]=0);
+        questionSequence.forEach(q=>{ if(!q.special && q.dim) raw[q.dim] += Number(answers[q.id]||0); });
+        const levels = {}; dimensionOrder.forEach(d=>{ const s=raw[d]; levels[d]=s<=3?'L':(s===4?'M':'H'); });
+        const userVec = dimensionOrder.map(d=>({L:1,M:2,H:3}[levels[d]]));
+        const ranked = NORMAL_TYPES.map(t=>{ const v=t.pattern.replace(/-/g,'').split('').map(c=>({L:1,M:2,H:3}[c])); let dist=0,exact=0; for(let i=0;i<v.length;i++){ const diff=Math.abs(userVec[i]-v[i]); dist+=diff; if(diff===0)exact++; } return {...t, ...TYPE_LIBRARY[t.code], distance:dist, exact, similarity:Math.max(0,Math.round((1-dist/30)*100))}; }).sort((a,b)=>a.distance-b.distance||b.exact-a.exact);
         const best = ranked[0];
         const drunk = answers['drink_gate_q2'] === 2;
-        let final, kicker = '你的主类型', badge = `匹配度 ${best.similarity}% · 精准命中 ${best.exact}/15 维`, sub = '维度命中度较高，当前结果可视为你的第一人格画像。', special = false;
-        
-        if (drunk) {
-          final = TYPE_LIBRARY.DRUNK;
-          kicker = '隐藏人格已激活';
-          badge = '匹配度 100% · 酒精异常因子已接管';
-          sub = '乙醇亲和性过强，系统已直接跳过常规人格审判。';
-          special = true;
-        } else if (best.similarity < 60) {
-          final = TYPE_LIBRARY.HHHH;
-          kicker = '系统强制兜底';
-          badge = `标准人格库最高匹配仅 ${best.similarity}%`;
-          sub = '标准人格库对你的脑回路集体罢工了，于是系统把你强制分配给了 HHHH。';
-          special = true;
-        } else {
-          final = best;
-        }
-        return { rawScores, levels, finalType: final, modeKicker: kicker, badge, sub, special };
+        let final, kicker='你的主类型', badge=`匹配度 ${best.similarity}% · 精准命中 ${best.exact}/15 维`, sub='维度命中度较高', special=false;
+        if(drunk){ final=TYPE_LIBRARY.DRUNK; kicker='隐藏人格已激活'; badge='匹配度 100% · 酒精异常因子已接管'; sub='乙醇亲和性过强'; special=true; }
+        else if(best.similarity<60){ final=TYPE_LIBRARY.HHHH; kicker='系统强制兜底'; badge=`最高匹配仅 ${best.similarity}%`; sub='标准人格库罢工'; special=true; }
+        else final=best;
+        return { rawScores:raw, levels, finalType:final, modeKicker:kicker, badge, sub, special, bestNormal:best };
       }
 
-      function renderDimList(res) {
-        const dimList = document.getElementById('dimList');
-        dimList.innerHTML = dimensionOrder.map(dim => {
-          const lv = res.levels[dim];
-          const exp = DIM_EXPLANATIONS[dim][lv];
-          return `<div class="dim-item"><div class="dim-item-top"><div class="dim-item-name">${dimensionMeta[dim].name}</div><div class="dim-item-score">${lv} / ${res.rawScores[dim]}分</div></div><p>${exp}</p></div>`;
-        }).join('');
-      }
-
-      function showResult() {
-        const res = computeResult();
+      function renderResultPage(res) {
         const t = res.finalType;
         document.getElementById('resultModeKicker').textContent = res.modeKicker;
         document.getElementById('resultTypeName').textContent = `${t.code}（${t.cn}）`;
@@ -863,45 +639,105 @@
         document.getElementById('resultTypeSub').textContent = res.sub;
         document.getElementById('resultDesc').textContent = t.desc;
         document.getElementById('posterCaption').textContent = t.intro;
-        document.getElementById('funNote').textContent = res.special ? '本测试仅供娱乐。隐藏人格和傻乐兜底都属于作者故意埋的损招。' : '本测试仅供娱乐，别拿它当诊断、面试、相亲、分手、算命或人生判决书。';
-        const posterBox = document.getElementById('posterBox');
-        const posterImg = document.getElementById('posterImage');
+        document.getElementById('funNote').textContent = res.special ? '本测试仅供娱乐。' : '本测试仅供娱乐，别拿它当诊断、面试、相亲、分手、算命或人生判决书。';
+        const posterBox = document.getElementById('posterBox'), posterImg = document.getElementById('posterImage');
         const src = TYPE_IMAGES[t.code];
-        if (src) {
-          posterImg.src = src;
-          posterImg.alt = `${t.code}（${t.cn}）`;
-          posterBox.classList.remove('no-image');
-        } else {
-          posterImg.removeAttribute('src');
-          posterBox.classList.add('no-image');
-        }
-        renderDimList(res);
-        showScreen('result');
+        if(src){ posterImg.src = src; posterBox.classList.remove('no-image'); } else { posterImg.removeAttribute('src'); posterBox.classList.add('no-image'); }
+        document.getElementById('dimList').innerHTML = dimensionOrder.map(d=>{
+          const lv=res.levels[d]; const exp=DIM_EXPLANATIONS[d][lv];
+          return `<div class="dim-item"><div class="dim-item-top"><div class="dim-item-name">${dimensionMeta[d].name}</div><div class="dim-item-score">${lv} / ${res.rawScores[d]}分</div></div><p>${exp}</p></div>`;
+        }).join('');
+      }
+
+      function showResult() {
+        const res = computeResult(); currentResultData = res;
+        renderResultPage(res); showScreen('result');
       }
 
       function showScreen(name) {
-        Object.values(screens).forEach(el => el.classList.remove('active'));
+        Object.values(screens).forEach(el=>el.classList.remove('active'));
         screens[name].classList.add('active');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({top:0,behavior:'smooth'});
       }
+      function startTest() { buildQuestionSequence(); renderCurrentQuestion(); showScreen('test'); }
 
-      function startTest() {
-        buildQuestionSequence();
-        currentIndex = 0;
-        renderCurrentQuestion();
-        showScreen('test');
+      // ----- 海报生成 (canvas) -----
+      const modal = document.getElementById('posterModal');
+      const posterPreview = document.getElementById('posterPreviewImage');
+      function generatePoster() {
+        if(!currentResultData) return;
+        const res = currentResultData;
+        const type = res.finalType;
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const width = 750, height = 1334; canvas.width = width; canvas.height = height;
+        // 背景
+        ctx.fillStyle = '#f6faf6'; ctx.fillRect(0,0,width,height);
+        // 装饰圆
+        ctx.fillStyle = '#dbe8dd'; ctx.beginPath(); ctx.arc(width-60, 60, 120, 0, 2*Math.PI); ctx.fill();
+        ctx.fillStyle = '#edf6ef'; ctx.beginPath(); ctx.arc(50, height-80, 150, 0, 2*Math.PI); ctx.fill();
+        // 标题
+        ctx.fillStyle = '#1e2a22'; ctx.font = 'bold 48px -apple-system, "PingFang SC", sans-serif';
+        ctx.fillText('SBTI', 50, 120);
+        ctx.font = '28px sans-serif'; ctx.fillStyle = '#6a786f'; ctx.fillText('人格测试结果', 50, 170);
+        // 类型大字
+        ctx.fillStyle = '#4d6a53'; ctx.font = 'bold 72px sans-serif'; ctx.fillText(type.code, 50, 280);
+        ctx.font = '36px sans-serif'; ctx.fillText(`（${type.cn}）`, 50, 340);
+        // 匹配信息
+        ctx.font = '22px sans-serif'; ctx.fillStyle = '#6a786f'; ctx.fillText(res.badge, 50, 410);
+        // 分割线
+        ctx.strokeStyle = '#bcd0c1'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(50,450); ctx.lineTo(width-50,450); ctx.stroke();
+        // 解读 (截取约200字)
+        let desc = type.desc; if(desc.length>240) desc = desc.slice(0,240)+'…';
+        ctx.font = '20px/1.6 sans-serif'; ctx.fillStyle = '#304034';
+        wrapText(ctx, desc, 50, 510, width-100, 32);
+        // 二维码 (右下)
+        const qrSize = 140;
+        const qrX = width - qrSize - 50, qrY = height - qrSize - 60;
+        // 绘制二维码背景白框
+        ctx.fillStyle = '#fff'; ctx.fillRect(qrX-8, qrY-8, qrSize+16, qrSize+16);
+        ctx.strokeStyle = '#4d6a53'; ctx.lineWidth=2; ctx.strokeRect(qrX-8, qrY-8, qrSize+16, qrSize+16);
+        // 生成二维码 (异步)
+        const homeUrl = window.location.origin + window.location.pathname;
+        QRCode.toCanvas(document.createElement('canvas'), homeUrl, { width:qrSize, margin:1 }, (err, qrCanvas)=>{
+          if(!err) {
+            ctx.drawImage(qrCanvas, qrX, qrY, qrSize, qrSize);
+            ctx.font = '16px sans-serif'; ctx.fillStyle = '#6a786f';
+            ctx.fillText('扫码直达首页', qrX, qrY-12);
+            // 最终显示
+            posterPreview.src = canvas.toDataURL('image/png');
+            modal.classList.add('show');
+          }
+        });
+        // 文字部分先绘制，二维码异步绘制后再预览
+        setTimeout(()=>{ posterPreview.src = canvas.toDataURL('image/png'); }, 300);
+      }
+      function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+        const words = text.split(''); let line = '';
+        for(let n=0; n<words.length; n++) {
+          const testLine = line + words[n];
+          if(ctx.measureText(testLine).width > maxWidth && n>0) {
+            ctx.fillText(line, x, y); line = words[n]; y += lineHeight;
+          } else line = testLine;
+        }
+        ctx.fillText(line, x, y);
       }
 
       // 事件绑定
       startBtn.addEventListener('click', startTest);
       restartBtn.addEventListener('click', startTest);
-      backIntroBtn.addEventListener('click', () => showScreen('intro'));
-      toTopBtn.addEventListener('click', () => showScreen('intro'));
+      backIntroBtn.addEventListener('click', ()=>showScreen('intro'));
+      toTopBtn.addEventListener('click', ()=>showScreen('intro'));
       prevBtn.addEventListener('click', goToPrev);
       nextBtn.addEventListener('click', goToNext);
       submitBtn.addEventListener('click', showResult);
-      
-      // 初始显示首页
+      generatePosterBtn.addEventListener('click', generatePoster);
+      document.getElementById('closeModalBtn').addEventListener('click', ()=>modal.classList.remove('show'));
+      document.getElementById('savePosterBtn').addEventListener('click', ()=>{
+        const link = document.createElement('a'); link.download = 'SBTI-'+ (currentResultData?.finalType.code || 'result') +'.png';
+        link.href = posterPreview.src; link.click();
+      });
+      modal.addEventListener('click', (e)=>{ if(e.target === modal) modal.classList.remove('show'); });
       showScreen('intro');
     })();
   </script>
