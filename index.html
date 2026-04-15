@@ -1668,19 +1668,23 @@
           const modalPreview = document.getElementById('modalCardPreview');
           modalPreview.innerHTML = '';
           
-          // 创建一个容器来显示 canvas，并设置其样式
-          const canvasContainer = document.createElement('div');
-          canvasContainer.style.width = '100%';
-          canvasContainer.style.maxWidth = '480px';
-          canvasContainer.style.margin = '0 auto';
+          // 创建一个容器来显示图片，并设置其样式
+          const imageContainer = document.createElement('div');
+          imageContainer.style.width = '100%';
+          imageContainer.style.maxWidth = '480px';
+          imageContainer.style.margin = '0 auto';
           
-          // 设置 canvas 的样式，确保它能正确缩放
-          canvas.style.width = '100%';
-          canvas.style.height = 'auto';
-          canvas.style.display = 'block';
+          // 创建img元素，将canvas转换为图片
+          const img = document.createElement('img');
+          img.src = canvas.toDataURL('image/png');
+          img.style.width = '100%';
+          img.style.height = 'auto';
+          img.style.display = 'block';
+          img.style.cursor = 'pointer';
+          img.title = '长按保存图片';
           
-          canvasContainer.appendChild(canvas);
-          modalPreview.appendChild(canvasContainer);
+          imageContainer.appendChild(img);
+          modalPreview.appendChild(imageContainer);
           modal.style.display = 'block';
           
           // 保存图片按钮点击事件
@@ -1688,7 +1692,7 @@
             const link = document.createElement('a');
             const cardType = document.getElementById(`cardTypeFull${currentCardStyle}`);
             link.download = `SBTI-${cardType.textContent}.png`;
-            link.href = canvas.toDataURL();
+            link.href = img.src; // 使用img元素的src属性
             link.click();
           };
         }).catch(error => {
