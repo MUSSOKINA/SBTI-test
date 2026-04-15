@@ -569,43 +569,86 @@
       margin-bottom: 20px;
     }
     
-    .card-header h3 {
-      font-size: 14px;
-      color: var(--muted);
-      margin: 0 0 8px 0;
-      font-weight: 500;
+    .card-type-section {
+      background: #f8f9fa;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+      border: 1px solid var(--line);
     }
     
-    .card-type {
+    .card-type-section .type-label {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    
+    .card-type-section .type-name {
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    
+    .card-type-section .type-code {
       font-size: 28px;
       font-weight: bold;
       color: var(--accent-strong);
-      margin-bottom: 4px;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    
-    .card-title {
-      font-size: 16px;
-      color: var(--muted);
-      margin-bottom: 12px;
-    }
-    
-    .card-match {
-      font-size: 13px;
-      color: var(--accent);
       margin-bottom: 16px;
     }
     
-    .card-image {
+    .card-type-section .card-image {
       margin: 16px 0;
       display: flex;
       justify-content: center;
     }
     
-    .card-image img {
+    .card-type-section .card-image img {
       width: 120px;
       height: 120px;
       object-fit: contain;
+    }
+    
+    .card-type-section .type-intro {
+      font-size: 14px;
+      color: var(--muted);
+      margin-top: 12px;
+      font-style: italic;
+    }
+    
+    .card-info {
+      margin-bottom: 20px;
+    }
+    
+    .card-info .main-type {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    
+    .card-info .type-full {
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+    
+    .card-info .match-badge {
+      display: inline-block;
+      background: var(--soft);
+      color: var(--accent-strong);
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    
+    .card-info .type-sub {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
     }
     
     .card-content {
@@ -670,9 +713,22 @@
     
     /* 响应式调整 */
     @media (max-width: 480px) {
-      .card-preview {
+      #cardPreview1 {
         width: 100%;
-        max-width: 360px;
+        max-width: 480px;
+      }
+      #cardPreview2 {
+        width: 100%;
+        max-width: 480px;
+      }
+      
+      #cardPreview2 .card-info {
+        flex: 1;
+      }
+      
+      #cardPreview2 .qrcode-container {
+        width: 70px !important;
+        height: 70px !important;
       }
     }
     
@@ -1000,27 +1056,65 @@
         <!-- 卡片生成器 -->
         <div class="card-generator">
           <h3 style="text-align: center; margin-bottom: 20px;">生成你的人格卡片</h3>
-          <div class="card-preview" id="cardPreview">
-            <div class="card-header">
-              <h3>SBTI Test Result</h3>
-              <div class="card-type" id="cardType">CTRL</div>
-              <div class="card-title" id="cardTitle">拿捏者</div>
-              <div class="card-match" id="cardMatch">你的主类型 · 匹配度 92% · 精准命中 14/15 维</div>
-              <div class="card-image" id="cardImage">
-                <img src="" alt="人格类型图片">
-              </div>
+          
+          <!-- 卡片样式切换 -->
+          <div style="text-align: center; margin-bottom: 20px;">
+            <div style="display: inline-flex; background: var(--soft); border-radius: 12px; padding: 4px;">
+              <button id="style1Btn" class="btn-secondary" style="border-radius: 8px; padding: 8px 16px; font-size: 14px; background: var(--accent-strong); color: white; border: none;">样式一</button>
+              <button id="style2Btn" class="btn-secondary" style="border-radius: 8px; padding: 8px 16px; font-size: 14px; margin-left: 8px;">样式二</button>
             </div>
-            <div class="card-content" id="cardContent">
+          </div>
+          
+          <!-- 样式一 -->
+          <div class="card-preview" id="cardPreview1" style="display: block; width: 480px; position: relative;">
+            <div class="card-type-section" style="text-align: center; padding: 20px;">
+              <div class="card-image" id="cardImage1">
+                <img src="" alt="人格类型图片" style="width: 360px; height: auto; max-width: 90%; object-fit: contain; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15); border-radius: 8px; display: block; margin: 0 auto;">
+              </div>
+              <div class="type-intro" id="cardIntro1" style="margin-top: 16px; font-size: 16px; color: var(--accent-strong); font-weight: 600;">gogogo~出发咯</div>
+            </div>
+            <div class="card-info" style="background: var(--soft); border-radius: 12px; padding: 16px; margin: 20px 0;">
+              <div class="main-type">你的主类型</div>
+              <div class="type-full" id="cardTypeFull1">CTRL（拿捏者）</div>
+              <div class="match-badge" id="cardMatch1">匹配度 92% · 精准命中 14/15 维</div>
+              <div class="type-sub" id="cardSub1">维度命中度较高，当前结果可视为你的第一人格画像。</div>
+            </div>
+            <div class="card-content" id="cardContent1">
               <h4>人格解读</h4>
               <p>恭喜您，您测出了全中国最为罕见的人格，您是宇宙熵增定律的天然反抗者！全世界所谓成功人士里，99.99%都是您的拙劣模仿者。CTRL人格，是行走的人形自走任务管理器，普通人眼中的"规则"，在您这里只是出厂的基础参数设置；凡人所谓的"计划"，对您而言不过是心血来潮的随手涂鸦。</p>
             </div>
             <div class="card-footer">
               <div class="qrcode-container">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=70x70&data=https://sbti-test.example.com" alt="SBTI测试二维码">
+                <img src="image\qrcode.png" alt="SBTI测试二维码">
               </div>
               <div class="qrcode-text">扫码测测你的SBTI</div>
             </div>
           </div>
+          
+          <!-- 样式二 -->
+          <div class="card-preview" id="cardPreview2" style="display: none; border: 2px solid var(--accent); box-shadow: 0 12px 32px rgba(108, 141, 113, 0.15); width: 480px; position: relative; padding: 20px;">
+            <div style="text-align: center; margin-bottom: 20px;">
+              <div class="card-image" id="cardImage2">
+                <img src="" alt="人格类型图片" style="width: 360px; height: auto; max-width: 90%; object-fit: contain; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15); border-radius: 8px; display: block; margin: 0 auto;">
+              </div>
+              <div class="type-intro" id="cardIntro2" style="margin-top: 16px; font-size: 16px; color: var(--accent-strong); font-weight: 600;">gogogo~出发咯</div>
+            </div>
+            <div style="display: flex; align-items: flex-end; gap: 20px; margin-bottom: 20px;">
+              <div class="card-info" style="background: var(--soft); border-radius: 12px; padding: 16px; flex: 1; min-width: 0;">
+                <div class="main-type">你的主类型</div>
+                <div class="type-full" id="cardTypeFull2">CTRL（拿捏者）</div>
+                <div class="match-badge" id="cardMatch2">匹配度 92% · 精准命中 14/15 维</div>
+                <div class="type-sub" id="cardSub2">维度命中度较高，当前结果可视为你的第一人格画像。</div>
+              </div>
+              <div style="text-align: center; background: white; padding: 8px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); flex-shrink: 0;">
+                <div class="qrcode-container" style="width: 70px; height: 70px;">
+                  <img src="image\qrcode.png" alt="SBTI测试二维码" style="width: 100%; height: 100%;">
+                </div>
+                <div class="qrcode-text" style="font-size: 10px; margin-top: 6px; color: #666;">扫码测测你的SBTI</div>
+              </div>
+            </div>
+          </div>
+          
           <div style="text-align: center;">
             <button id="generateCardBtn" class="generate-btn">保存卡片</button>
           </div>
@@ -1035,7 +1129,7 @@
             </div>
             <div class="modal-body">
               <p>先预览海报，再手动保存到相册。</p>
-              <div id="modalCardPreview" style="margin: 20px 0;"></div>
+              <div id="modalCardPreview" style="margin: 20px auto; max-width: 480px; text-align: center; padding: 0 20px;"></div>
               <p>微信内请长按海报图片保存到相册；电脑端可点击"保存图片"。</p>
             </div>
             <div class="modal-actions">
@@ -1408,26 +1502,48 @@
         }).join('');
       }
 
+      // 当前选中的卡片样式
+      let currentCardStyle = 1;
+      
       // 更新卡片预览
       function updateCardPreview(res) {
         const t = res.finalType;
-        document.getElementById('cardType').textContent = t.code;
-        document.getElementById('cardTitle').textContent = t.cn;
-        document.getElementById('cardMatch').textContent = res.badge;
+        
+        // 更新样式一
+        document.getElementById('cardTypeFull1').textContent = `${t.code}（${t.cn}）`;
+        document.getElementById('cardMatch1').textContent = res.badge;
+        document.getElementById('cardSub1').textContent = res.sub;
+        document.getElementById('cardIntro1').textContent = t.intro;
         
         // 更新人格解读
-        const cardContent = document.getElementById('cardContent');
-        cardContent.innerHTML = `<h4>人格解读</h4><p>${t.desc}</p>`;
+        const cardContent1 = document.getElementById('cardContent1');
+        cardContent1.innerHTML = `<h4>人格解读</h4><p>${t.desc}</p>`;
         
         // 添加人格类型图片
-        const cardImage = document.querySelector('#cardImage img');
+        const cardImage1 = document.querySelector('#cardImage1 img');
         const src = TYPE_IMAGES[t.code];
         if (src) {
-          cardImage.src = src;
-          cardImage.alt = `${t.code}（${t.cn}）`;
+          cardImage1.src = src;
+          cardImage1.alt = `${t.code}（${t.cn}）`;
         } else {
-          cardImage.src = '';
-          cardImage.alt = '';
+          cardImage1.src = '';
+          cardImage1.alt = '';
+        }
+        
+        // 更新样式二
+        document.getElementById('cardTypeFull2').textContent = `${t.code}（${t.cn}）`;
+        document.getElementById('cardMatch2').textContent = res.badge;
+        document.getElementById('cardSub2').textContent = res.sub;
+        document.getElementById('cardIntro2').textContent = t.intro;
+        
+        // 添加人格类型图片
+        const cardImage2 = document.querySelector('#cardImage2 img');
+        if (src) {
+          cardImage2.src = src;
+          cardImage2.alt = `${t.code}（${t.cn}）`;
+        } else {
+          cardImage2.src = '';
+          cardImage2.alt = '';
         }
       }
 
@@ -1481,22 +1597,42 @@
           return;
         }
         
-        html2canvas(document.getElementById('cardPreview'), {
+        const cardPreview = document.getElementById(`cardPreview${currentCardStyle}`);
+        const cardType = document.getElementById(`cardType${currentCardStyle}`);
+        
+        html2canvas(cardPreview, {
           useCORS: true,
           logging: false,
-          scale: 2
+          scale: 2,
+          width: cardPreview.offsetWidth,
+          height: cardPreview.offsetHeight,
+          scrollX: 0,
+          scrollY: 0
         }).then(canvas => {
           // 显示预览模态框
           const modal = document.getElementById('previewModal');
           const modalPreview = document.getElementById('modalCardPreview');
           modalPreview.innerHTML = '';
-          modalPreview.appendChild(canvas);
+          
+          // 创建一个容器来显示 canvas，并设置其样式
+          const canvasContainer = document.createElement('div');
+          canvasContainer.style.width = '100%';
+          canvasContainer.style.maxWidth = '480px';
+          canvasContainer.style.margin = '0 auto';
+          
+          // 设置 canvas 的样式，确保它能正确缩放
+          canvas.style.width = '100%';
+          canvas.style.height = 'auto';
+          canvas.style.display = 'block';
+          
+          canvasContainer.appendChild(canvas);
+          modalPreview.appendChild(canvasContainer);
           modal.style.display = 'block';
           
           // 保存图片按钮点击事件
           document.getElementById('saveImageBtn').onclick = function() {
             const link = document.createElement('a');
-            link.download = `SBTI-${document.getElementById('cardType').textContent}.png`;
+            link.download = `SBTI-${cardType.textContent}.png`;
             link.href = canvas.toDataURL();
             link.click();
           };
@@ -1536,6 +1672,27 @@
       nextBtn.addEventListener('click', goToNext);
       submitBtn.addEventListener('click', showResult);
       generateCardBtn.addEventListener('click', generateAndDownloadCard);
+      
+      // 卡片样式切换
+      document.getElementById('style1Btn').addEventListener('click', function() {
+        document.getElementById('cardPreview1').style.display = 'block';
+        document.getElementById('cardPreview2').style.display = 'none';
+        document.getElementById('style1Btn').style.background = 'var(--accent-strong)';
+        document.getElementById('style1Btn').style.color = 'white';
+        document.getElementById('style2Btn').style.background = '';
+        document.getElementById('style2Btn').style.color = 'var(--accent-strong)';
+        currentCardStyle = 1;
+      });
+      
+      document.getElementById('style2Btn').addEventListener('click', function() {
+        document.getElementById('cardPreview1').style.display = 'none';
+        document.getElementById('cardPreview2').style.display = 'block';
+        document.getElementById('style2Btn').style.background = 'var(--accent-strong)';
+        document.getElementById('style2Btn').style.color = 'white';
+        document.getElementById('style1Btn').style.background = '';
+        document.getElementById('style1Btn').style.color = 'var(--accent-strong)';
+        currentCardStyle = 2;
+      });
       
       // 初始显示首页
       showScreen('intro');
