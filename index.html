@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>SBTI 人格测试 · 全新维度</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
@@ -716,10 +716,12 @@
       #cardPreview1 {
         width: 100%;
         max-width: 480px;
+        min-height: 400px;
       }
       #cardPreview2 {
         width: 100%;
         max-width: 480px;
+        min-height: 400px;
       }
       
       #cardPreview2 .card-info {
@@ -729,6 +731,61 @@
       #cardPreview2 .qrcode-container {
         width: 70px !important;
         height: 70px !important;
+      }
+      
+      /* 模态框优化 */
+      .modal-content {
+        margin: 10% auto;
+        padding: 16px;
+        width: 95%;
+        max-width: 360px;
+      }
+      
+      /* 按钮优化 */
+      .btn-primary {
+        font-size: 1.2rem;
+        padding: 12px 20px;
+      }
+      
+      .btn-secondary {
+        font-size: 14px;
+        padding: 10px 16px;
+      }
+      
+      /* 选项按钮优化 */
+      .option {
+        padding: 12px 14px;
+      }
+      
+      .option-code {
+        font-size: 1rem;
+      }
+      
+      /* 结果页面优化 */
+      .poster-image {
+        min-height: 180px;
+      }
+      
+      .type-name {
+        font-size: 24px;
+      }
+      
+      /* 首页优化 */
+      .intro-section {
+        padding: 16px;
+      }
+      
+      .intro-section h2 {
+        font-size: 20px;
+      }
+      
+      .dimension-card {
+        padding: 12px;
+      }
+      
+      .type-tag {
+        font-size: 12px;
+        padding: 6px 10px;
       }
     }
     
@@ -1598,7 +1655,6 @@
         }
         
         const cardPreview = document.getElementById(`cardPreview${currentCardStyle}`);
-        const cardType = document.getElementById(`cardType${currentCardStyle}`);
         
         html2canvas(cardPreview, {
           useCORS: true,
@@ -1632,6 +1688,7 @@
           // 保存图片按钮点击事件
           document.getElementById('saveImageBtn').onclick = function() {
             const link = document.createElement('a');
+            const cardType = document.getElementById(`cardTypeFull${currentCardStyle}`);
             link.download = `SBTI-${cardType.textContent}.png`;
             link.href = canvas.toDataURL();
             link.click();
